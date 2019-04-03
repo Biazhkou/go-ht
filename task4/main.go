@@ -14,7 +14,7 @@ func main() {
 	timeout := flag.Int("timeout", 2500, "Timeout per request")
 	flag.Parse()
 	durations := executeRequests(*url, *reqAmount, *timeout)
-	printStat(durations, *reqAmount)
+	printStatistic(durations, *reqAmount)
 }
 
 func executeRequests(url string, reqAmount int, timeout int) (durations []int64) {
@@ -34,13 +34,6 @@ func executeRequests(url string, reqAmount int, timeout int) (durations []int64)
 	return
 }
 
-func executeGet(url string, timeout int) (*http.Response, error) {
-	client := http.Client{
-		Timeout: time.Duration(timeout) * time.Millisecond,
-	}
-	return client.Get(url)
-}
-
 func handleGetExecution(url string, timeout int) (duration int64) {
 	startTime := time.Now()
 	response, err := executeGet(url, timeout)
@@ -51,7 +44,14 @@ func handleGetExecution(url string, timeout int) (duration int64) {
 	return duration
 }
 
-func printStat(durations []int64, reqAmount int) {
+func executeGet(url string, timeout int) (*http.Response, error) {
+	client := http.Client{
+		Timeout: time.Duration(timeout) * time.Millisecond,
+	}
+	return client.Get(url)
+}
+
+func printStatistic(durations []int64, reqAmount int) {
 	var totalDuration int64
 	minDuration := durations[0]
 	maxDuration := durations[0]
